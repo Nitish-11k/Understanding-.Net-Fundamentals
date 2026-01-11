@@ -30,3 +30,4 @@
 /home/nickx/Desktop/TodoApi/obj/Debug/net8.0/TodoApi.pdb
 /home/nickx/Desktop/TodoApi/obj/Debug/net8.0/TodoApi.genruntimeconfig.cache
 /home/nickx/Desktop/TodoApi/obj/Debug/net8.0/ref/TodoApi.dll
+/home/nickx/Desktop/TodoApi/obj/Debug/net8.0/TodoApi.sourcelink.json
