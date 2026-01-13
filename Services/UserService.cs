@@ -42,7 +42,7 @@ namespace TodoApi.Services
 
       existingUser.Name = user.Name;
       existingUser.Email = user.Email;
-      existingUser.Password = user.Password;
+      existingUser.PasswordHash = user.PasswordHash;
 
       await _context.SaveChangesAsync();
       return existingUser;
