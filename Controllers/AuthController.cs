@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Text;
-using TodoApi.Models;
+using TodoApi.Core.Models;
 using TodoApi.DTOs;
 using BCrypt.Net;
 

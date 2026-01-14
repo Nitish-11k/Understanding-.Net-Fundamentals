@@ -1,10 +1,10 @@
-using TodoApi.Models;
+using TodoApi.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace TodoApi.Services
+namespace TodoApi.Infrastructure.Services
 {
   public class UserService 
   {

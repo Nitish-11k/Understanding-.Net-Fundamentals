@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using TodoApi.Models;
-using TodoApi.Services;
+using TodoApi.Core.Models;
+using TodoApi.Infrastructure.Services;
 using System.Threading.Tasks;
 
 namespace Controllers

@@ -3,8 +3,14 @@ using Pomelo.EntityFrameworkCore.MySql;
 using Microsoft.AspNetCore.Authentication.JwtBearer; // New
 using Microsoft.IdentityModel.Tokens; // New
 using System.Text;
-using TodoApi.Services;
+using TodoApi.Infrastructure.Services;
+using TodoApi.Infrastructure.Jobs; // <--- ADD THIS for LicenseExpiryJob
 using TodoApi.Middleware;
+using Hangfire; // <--- ADD THIS
+using Hangfire.MySql; // <--- ADD THIS
+using Microsoft.AspNetCore.RateLimiting; // <--- ADD THIS for RateLimiter
+using System.Threading.RateLimiting; // <--- ADD THIS for FixedWindow options
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -42,12 +48,29 @@ builder.Services.AddDbContext<AppDBContext>(options =>
     )
     )
 );
+builder.Services.AddHangfire(config => 
+    config.UseStorage(new MySqlStorage(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlStorageOptions())));
+builder.Services.AddHangfireServer();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddStackExchangeRedisCache(options => {
+    options.Configuration = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
+});
+builder.Services.AddRateLimiter(options => {
+    options.AddFixedWindowLimiter("StrictPolicy", opt => {
+        opt.PermitLimit = 5;
+        opt.Window = TimeSpan.FromMinutes(1);
+    });
+});
+
 var app = builder.Build();
+app.UseHangfireDashboard();
+
+// 3. Schedule Job
+RecurringJob.AddOrUpdate<LicenseExpiryJob>("daily-expiry", job => job.RunAsync(), Cron.Daily);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
